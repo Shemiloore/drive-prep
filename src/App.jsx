@@ -2,12 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, Car, Calendar, Shield,
-  UserPlus, Navigation, ClipboardList, ChevronDown, Menu, X, Smartphone
+  UserPlus, Navigation, ClipboardList, ChevronDown, Menu, X, Smartphone,
+  PiggyBank, Target, Eye
 } from 'lucide-react'
 
-// ─── Google Apps Script URL ───────────────────────────────────────────────────
-// Replace this with your deployed Google Apps Script web app URL
-const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
+const API_URL = '/api/waitlist'
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 const blurIn = {
@@ -257,23 +256,14 @@ function WaitlistForm() {
     setStatus('loading')
 
     try {
-      const formData = new URLSearchParams()
-      formData.append('name', name.trim())
-      formData.append('email', email.trim())
-      formData.append('device', device)
-      formData.append('timestamp', new Date().toISOString())
-
-      await fetch(GOOGLE_SCRIPT_URL, {
+      const res = await fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        body: formData,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), device }),
       })
-
-      // With no-cors we can't read the response, so we optimistically succeed
+      if (!res.ok) throw new Error('Failed')
       setStatus('success')
-    } catch (err) {
-      console.error(err)
+    } catch {
       setStatus('error')
       setErrorMsg('Something went wrong. Please try again.')
     }
@@ -291,7 +281,7 @@ function WaitlistForm() {
           <CheckCircle2 size={28} className="text-green-600" />
         </div>
         <p className="text-green-800 font-semibold text-xl mb-2">You're on the list!</p>
-        <p className="text-green-700 text-sm leading-relaxed">
+        <p className="text-green-700 text-base leading-relaxed">
           We'll email you the moment Drive Prep launches. One email, no spam.
         </p>
       </motion.div>
@@ -308,7 +298,7 @@ function WaitlistForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-5 py-4 rounded-full border border-gray-200 bg-white text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+          className="w-full px-5 py-4 rounded-full border border-gray-200 bg-white text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
         />
       </motion.div>
 
@@ -320,13 +310,13 @@ function WaitlistForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full px-5 py-4 rounded-full border border-gray-200 bg-white text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+          className="w-full px-5 py-4 rounded-full border border-gray-200 bg-white text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
         />
       </motion.div>
 
       {/* Device picker */}
       <motion.div variants={fadeUp} custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2.5 px-1">
+        <p className="text-sm font-semibold text-gray-600 uppercase tracking-widest mb-2.5 px-1">
           Which phone do you use?
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -376,14 +366,14 @@ function WaitlistForm() {
             </>
           ) : (
             <>
-              Get Early Access
+              Join the waitlist
               <ArrowRight size={16} />
             </>
           )}
         </button>
       </motion.div>
 
-      <p className="text-center text-xs text-gray-400 pt-1">
+      <p className="text-center text-sm text-gray-500 pt-1">
         No spam. One email when we launch. UK learners only.
       </p>
     </form>
@@ -427,7 +417,7 @@ export default function App() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                <span className="text-xs font-semibold text-violet-700 uppercase tracking-widest">Launching Soon</span>
+                <span className="text-xs font-semibold text-violet-700 uppercase tracking-widest">Early Access</span>
               </motion.div>
 
               {/* Headline */}
@@ -458,37 +448,16 @@ export default function App() {
                 custom={3}
                 initial="hidden"
                 animate="visible"
-                className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl"
+                className="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl"
               >
-                Most learners think they're ready. Then they fail on something they could have caught.
-                Drive Prep lets you run a test-style drive with someone you trust — they stay quiet,
-                log every fault, and show you exactly what would pass or fail you.
+                Run a full mock test drive with someone you trust.
+                They stay quiet, note your faults, and the app tells you if you'd pass or fail.
               </motion.p>
-
-              {/* Bullets */}
-              <motion.ul
-                variants={blurIn}
-                custom={4}
-                initial="hidden"
-                animate="visible"
-                className="space-y-3 mb-10"
-              >
-                {[
-                  'Run a full test-style drive with your Buddy',
-                  'No hints, no coaching — just observation',
-                  'See your fault breakdown before the examiner does',
-                ].map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-gray-700 text-base font-medium">
-                    <CheckCircle2 size={20} className="text-violet-600 mt-0.5 shrink-0" />
-                    {point}
-                  </li>
-                ))}
-              </motion.ul>
 
               {/* CTAs */}
               <motion.div
                 variants={blurIn}
-                custom={5}
+                custom={4}
                 initial="hidden"
                 animate="visible"
                 className="flex flex-wrap items-center gap-4"
@@ -497,16 +466,10 @@ export default function App() {
                   onClick={scrollToWaitlist}
                   className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-7 py-4 rounded-full text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95"
                 >
-                  Join the Waitlist — It's Free
+                  Join the waitlist
                   <ArrowRight size={18} />
                 </button>
-                <a
-                  href="#how"
-                  className="flex items-center gap-2 text-gray-700 hover:text-violet-600 font-semibold px-6 py-4 rounded-full border border-gray-200 hover:border-violet-200 text-sm sm:text-base transition-all duration-200 hover:bg-violet-50"
-                >
-                  See how it works
-                  <ChevronDown size={16} />
-                </a>
+                <p className="text-sm text-gray-500 self-center">No spam. One email when we launch.</p>
               </motion.div>
             </div>
 
@@ -530,7 +493,7 @@ export default function App() {
       </section>
 
       {/* ── Who It's For ──────────────────────────────────────────────────── */}
-      <section id="who" className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50/60">
+      <section id="who" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
@@ -539,12 +502,12 @@ export default function App() {
             viewport={{ once: true, margin: '-80px' }}
             className="text-center mb-14"
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-3">WHO IT'S FOR</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight max-w-2xl mx-auto">
-              For learners who are close — but don't want to gamble it
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-3">
+              Is this for you?
             </h2>
-            <p className="mt-4 text-gray-500 text-lg max-w-xl mx-auto">
-              Not for beginners. Drive Prep is for when you're nearly there.
+            <p className="text-gray-600 text-xl max-w-xl mx-auto">
+              Not for beginners.
             </p>
           </motion.div>
 
@@ -552,22 +515,22 @@ export default function App() {
             {[
               {
                 Icon: Car,
-                title: 'Ready to drive',
-                desc: "You can already handle the car independently. Day-to-day driving feels natural.",
+                title: 'You can already drive on your own',
+                story: "You're past beginner lessons, comfortable solo driving.",
                 bg: 'bg-violet-100',
                 iconClass: 'text-violet-600',
               },
               {
                 Icon: Calendar,
-                title: 'Test on the horizon',
-                desc: "Your test is coming up — or you've failed before and don't want that feeling again.",
+                title: "Your test is soon (or you've failed before)",
+                story: "Test date locked in, or second-chance nerves are real.",
                 bg: 'bg-purple-100',
                 iconClass: 'text-purple-600',
               },
               {
                 Icon: Shield,
-                title: 'Confidence, not hope',
-                desc: "You want proof you're ready, not just fingers crossed. Track faults going down with each run.",
+                title: 'You want confidence, not guesswork',
+                story: "Proof you'd pass today. Not hope so.",
                 bg: 'bg-indigo-100',
                 iconClass: 'text-indigo-600',
               },
@@ -580,13 +543,13 @@ export default function App() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-white rounded-[28px] p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
+                className="bg-white rounded-[28px] p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
               >
                 <div className={`w-12 h-12 ${card.bg} rounded-2xl flex items-center justify-center mb-5`}>
                   <card.Icon size={22} className={card.iconClass} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{card.title}</h3>
-                <p className="text-gray-500 leading-relaxed">{card.desc}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
+                <p className="text-gray-600 text-base leading-relaxed">{card.story}</p>
               </motion.div>
             ))}
           </div>
@@ -603,9 +566,9 @@ export default function App() {
             viewport={{ once: true, margin: '-80px' }}
             className="text-center mb-14"
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-3">HOW IT WORKS</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight max-w-2xl mx-auto">
-              A quiet car, a marked sheet, and the truth — before it counts
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
+              Three steps. One honest result.
             </h2>
           </motion.div>
 
@@ -617,20 +580,20 @@ export default function App() {
               {
                 num: '1',
                 Icon: UserPlus,
-                title: 'Invite Your Buddy',
-                desc: "Choose someone with a full UK licence (3+ years). A parent, partner, or sibling.",
+                title: 'Invite a Buddy',
+                story: 'Full UK licence, 3+ years. Parent, partner, sibling.',
               },
               {
                 num: '2',
                 Icon: Navigation,
-                title: "Drive Like It's Real",
-                desc: "Your Buddy sets the route and stays quiet. No hints. They log faults while you follow the map.",
+                title: "Drive like it's the real test",
+                story: 'They stay quiet. You follow sat nav. They note faults.',
               },
               {
                 num: '3',
                 Icon: ClipboardList,
-                title: 'See Where You Stand',
-                desc: "Full fault breakdown showing exactly what would pass or fail you. Fix weak points. Run it again.",
+                title: "See your result",
+                story: 'App shows pass or fail, and exactly what went wrong.',
               },
             ].map((step, i) => (
               <motion.div
@@ -648,8 +611,8 @@ export default function App() {
                     {step.num}
                   </span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-500 leading-relaxed max-w-xs mx-auto">{step.desc}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
+                <p className="text-gray-600 text-base leading-relaxed max-w-xs mx-auto">{step.story}</p>
               </motion.div>
             ))}
           </div>
@@ -670,7 +633,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-8"
+            className="text-sm font-semibold uppercase tracking-widest text-white/60 mb-8"
           >
             WHY THIS IS DIFFERENT
           </motion.p>
@@ -681,30 +644,19 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1] mb-8"
+            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1] mb-14"
           >
-            Lessons teach you how to drive.
-            <br />
-            <span className="text-purple-400">Drive Prep tells you if you're ready.</span>
+            LESSONS teach you <span className="text-purple-400">HOW</span> to drive.{' '}
+            <br className="hidden sm:block" />
+            DrivePrep shows <span className="text-purple-400">IF</span> you're{' '}
+            <span className="text-purple-400">READY.</span>
           </motion.h2>
-
-          <motion.p
-            variants={blurIn}
-            custom={2}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            className="text-white/60 text-lg leading-relaxed mb-14 max-w-2xl mx-auto"
-          >
-            Your instructor knows your habits and tends to rescue you. Your examiner won't.
-            We remove the safety net so you find the gaps on your terms — not in the test centre car park.
-          </motion.p>
 
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { title: 'No memorised routes', desc: "Every run is different. Real roads, real conditions." },
-              { title: 'Structured, repeatable', desc: "Same marking criteria every time. Compare runs fairly." },
-              { title: 'Real confidence', desc: "You'll know you're ready — not hope you are." },
+              { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
+              { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },
+              { Icon: Eye, title: 'Go in knowing what to expect', story: 'Test day feels familiar. Not scary.' },
             ].map((card, i) => (
               <motion.div
                 key={card.title}
@@ -716,72 +668,11 @@ export default function App() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="bg-white/5 border border-white/10 rounded-2xl p-6 text-left hover:bg-white/10 transition-all duration-200 will-change-transform"
               >
-                <h3 className="text-white font-semibold mb-2">{card.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{card.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Social Proof ──────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50/60">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            className="text-center mb-14"
-          >
-            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-3">EARLY TESTERS</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 max-w-lg mx-auto leading-tight">
-              From learners who've tried it
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: "I thought I was ready. Drive Prep showed me I was checking mirrors too late. Fixed it the next run — passed my real test 2 days later.",
-                name: "Sarah",
-                location: "Manchester",
-                detail: "Passed first try after 1 practice run",
-              },
-              {
-                quote: "Failed my first test and was too nervous to book again. Doing Drive Prep runs gave me actual data — not just a feeling. Booked again. Passed.",
-                name: "James",
-                location: "Leeds",
-                detail: "Passed second attempt after 3 Drive Prep runs",
-              },
-              {
-                quote: "My dad was perfect as a Buddy. He just marked the sheet and said nothing. Seeing the fault count drop from 8 to 3 to 1 was genuinely calming.",
-                name: "Priya",
-                location: "London",
-                detail: "Used it 4 times before test, no nerves on the day",
-              },
-            ].map((t, i) => (
-              <motion.div
-                key={t.name}
-                variants={fadeUp}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-white rounded-[28px] p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative will-change-transform"
-              >
-                <span className="absolute top-5 right-7 text-7xl text-violet-100 font-serif leading-none select-none">"</span>
-                <p className="text-gray-700 leading-relaxed mb-6 relative z-10">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-gradient-to-br from-violet-400 to-purple-600 rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-semibold">{t.name[0]}</span>
-                  </div>
-                  <div>
-                    <p className="text-gray-900 font-semibold text-sm">{t.name}, {t.location}</p>
-                    <p className="text-gray-400 text-xs mt-0.5">{t.detail}</p>
-                  </div>
+                <div className="w-10 h-10 bg-purple-900/50 rounded-xl flex items-center justify-center mb-4">
+                  <card.Icon size={18} className="text-purple-400" />
                 </div>
+                <h3 className="text-white font-semibold mb-1">{card.title}</h3>
+                <p className="text-white/75 text-base leading-relaxed">{card.story}</p>
               </motion.div>
             ))}
           </div>
@@ -799,13 +690,13 @@ export default function App() {
             className="mb-10"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
-              Test in the next few weeks?
+              Build confidence for your exam
             </p>
             <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-4">
-              Don't leave it to chance.
+              Not confident about your test?<br />Failed before and don't want to again?
             </h2>
-            <p className="text-gray-500 text-lg">
-              Join the waitlist. Be first to run a proper dress rehearsal.
+            <p className="text-gray-700 text-xl font-medium">
+              DrivePrep is for you.
             </p>
           </motion.div>
 
@@ -822,10 +713,10 @@ export default function App() {
             </div>
             <span className="text-sm font-semibold text-gray-700">Drive Prep</span>
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} Drive Prep. Built for UK learner drivers.
           </p>
-          <p className="text-xs text-gray-400">Coming soon to iOS & Android</p>
+          <p className="text-sm text-gray-500">Coming soon to iOS & Android</p>
         </div>
       </footer>
     </div>

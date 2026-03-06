@@ -35,7 +35,7 @@ export default {
             email,
             attributes: {
               FIRSTNAME: name || '',
-              DEVICE: device || '',
+              DEVICES: device || '',
             },
             updateEnabled: true,
           }),

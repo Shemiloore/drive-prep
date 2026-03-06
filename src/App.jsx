@@ -393,7 +393,7 @@ export default function App() {
       <Nav onWaitlistClick={scrollToWaitlist} />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section className="relative flex items-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-white min-h-[80vh] lg:min-h-screen">
+      <section className="relative flex items-center pt-20 pb-10 sm:pb-16 px-4 sm:px-6 lg:px-8 bg-white lg:min-h-screen">
         {/* BG blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
@@ -411,7 +411,7 @@ export default function App() {
                 custom={0}
                 initial="hidden"
                 animate="visible"
-                className="inline-flex items-center gap-2 bg-violet-50 border border-violet-100 rounded-full px-4 py-2 mb-8"
+                className="inline-flex items-center gap-2 bg-violet-50 border border-violet-100 rounded-full px-4 py-2 mb-4 sm:mb-8"
               >
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -421,7 +421,7 @@ export default function App() {
               </motion.div>
 
               {/* Headline */}
-              <div className="mb-6 space-y-1">
+              <div className="mb-4 sm:mb-6 space-y-1">
                 <motion.h1
                   variants={blurIn}
                   custom={1}
@@ -448,7 +448,7 @@ export default function App() {
                 custom={3}
                 initial="hidden"
                 animate="visible"
-                className="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl"
+                className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-10 max-w-xl"
               >
                 Run a full mock test drive with someone you trust.
                 They stay quiet, note your faults, and the app tells you if you'd pass or fail.
@@ -460,16 +460,16 @@ export default function App() {
                 custom={4}
                 initial="hidden"
                 animate="visible"
-                className="flex flex-wrap items-center gap-4"
+                className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4"
               >
                 <button
                   onClick={scrollToWaitlist}
-                  className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-7 py-4 rounded-full text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95"
+                  className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-7 py-4 rounded-full text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95 w-full sm:w-auto"
                 >
                   Join the waitlist
                   <ArrowRight size={18} />
                 </button>
-                <p className="text-sm text-gray-500 self-center">No spam. One email when we launch.</p>
+                <p className="text-sm text-gray-500 text-center sm:text-left sm:self-center">No spam. One email when we launch.</p>
               </motion.div>
             </div>
 
@@ -493,14 +493,14 @@ export default function App() {
       </section>
 
       {/* ── Who It's For ──────────────────────────────────────────────────── */}
-      <section id="who" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
+      <section id="who" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-center mb-14"
+            className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-3">
@@ -543,7 +543,7 @@ export default function App() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-white rounded-[28px] p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
+                className="bg-white rounded-[28px] p-5 sm:p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
               >
                 <div className={`w-12 h-12 ${card.bg} rounded-2xl flex items-center justify-center mb-5`}>
                   <card.Icon size={22} className={card.iconClass} />
@@ -557,14 +557,14 @@ export default function App() {
       </section>
 
       {/* ── How It Works ──────────────────────────────────────────────────── */}
-      <section id="how" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="how" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-center mb-14"
+            className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
@@ -620,7 +620,7 @@ export default function App() {
       </section>
 
       {/* ── Dark Section ──────────────────────────────────────────────────── */}
-      <section id="why" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#0b021f] relative overflow-hidden">
+      <section id="why" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[#0b021f] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-purple-900/30 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-900/20 rounded-full blur-3xl" />
@@ -680,14 +680,14 @@ export default function App() {
       </section>
 
       {/* ── Waitlist / Final CTA ───────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white" ref={waitlistRef}>
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white" ref={waitlistRef}>
         <div className="max-w-md mx-auto text-center">
           <motion.div
             variants={blurIn}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="mb-10"
+            className="mb-7 sm:mb-10"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
               Build confidence for your exam

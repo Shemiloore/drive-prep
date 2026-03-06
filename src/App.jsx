@@ -427,7 +427,7 @@ export default function App() {
                   custom={1}
                   initial="hidden"
                   animate="visible"
-                  className="text-4xl sm:text-5xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] text-gray-900"
+                  className="text-[length:--text-fluid-hero] font-semibold tracking-tight leading-[1.05] text-gray-900"
                 >
                   Your driving test<br />is booked.
                 </motion.h1>
@@ -436,7 +436,7 @@ export default function App() {
                   custom={2}
                   initial="hidden"
                   animate="visible"
-                  className="text-4xl sm:text-5xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
+                  className="text-[length:--text-fluid-hero] font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
                 >
                   Are you actually ready?
                 </motion.h1>
@@ -503,7 +503,7 @@ export default function App() {
             className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-3">
+            <h2 className="text-[length:--text-fluid-h2] font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-3">
               Is this for you?
             </h2>
             <p className="text-gray-600 text-xl max-w-xl mx-auto">
@@ -511,7 +511,7 @@ export default function App() {
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-5">
             {[
               {
                 Icon: Car,
@@ -567,13 +567,13 @@ export default function App() {
             className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
+            <h2 className="text-[length:--text-fluid-h2] font-semibold tracking-tight text-gray-900 leading-tight text-balance">
               Three steps. One honest result.
             </h2>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8 relative">
-            {/* Connector line */}
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-8 relative">
+            {/* Connector line — only visible when 3 columns fit (lg+) */}
             <div className="hidden lg:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
 
             {[
@@ -644,15 +644,14 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-3xl sm:text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1] mb-10 sm:mb-14"
+            className="text-[length:--text-fluid-h2-dark] font-semibold tracking-tight text-white leading-[1.1] text-balance mb-10 sm:mb-14"
           >
             LESSONS teach you <span className="text-purple-400">HOW</span> to drive.{' '}
-            <br className="hidden sm:block" />
             DrivePrep shows <span className="text-purple-400">IF</span> you're{' '}
             <span className="text-purple-400">READY.</span>
           </motion.h2>
 
-          <div className="grid lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-4">
             {[
               { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
               { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },
@@ -692,8 +691,8 @@ export default function App() {
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
               Build confidence for your exam
             </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-4">
-              Not confident about your test?<br />Failed before and don't want to again?
+            <h2 className="text-[length:--text-fluid-h2] font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-4">
+              Not confident about your test? Failed before and don't want to again?
             </h2>
             <p className="text-gray-700 text-xl font-medium">
               DrivePrep is for you.

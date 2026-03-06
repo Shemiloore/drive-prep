@@ -66,7 +66,7 @@ function Nav({ onWaitlistClick }) {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center bg-gray-100/80 rounded-full px-1.5 py-1.5 gap-0.5">
+          <div className="hidden lg:flex items-center bg-gray-100/80 rounded-full px-1.5 py-1.5 gap-0.5">
             {links.map((link) => (
               <a
                 key={link.href}
@@ -79,7 +79,7 @@ function Nav({ onWaitlistClick }) {
           </div>
 
           {/* CTA + Badge */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -97,7 +97,7 @@ function Nav({ onWaitlistClick }) {
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="lg:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -114,7 +114,7 @@ function Nav({ onWaitlistClick }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-4"
+            className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-4"
           >
             {links.map((link) => (
               <a
@@ -511,7 +511,7 @@ export default function App() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid lg:grid-cols-3 gap-5">
             {[
               {
                 Icon: Car,
@@ -572,9 +572,9 @@ export default function App() {
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
+          <div className="grid lg:grid-cols-3 gap-8 relative">
             {/* Connector line */}
-            <div className="hidden md:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
+            <div className="hidden lg:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
 
             {[
               {
@@ -652,7 +652,7 @@ export default function App() {
             <span className="text-purple-400">READY.</span>
           </motion.h2>
 
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid lg:grid-cols-3 gap-4">
             {[
               { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
               { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },

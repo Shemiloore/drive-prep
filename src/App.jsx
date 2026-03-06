@@ -427,7 +427,7 @@ export default function App() {
                   custom={1}
                   initial="hidden"
                   animate="visible"
-                  className="text-[var(--text-fluid-hero)] font-semibold tracking-tight leading-[1.05] text-gray-900"
+                  className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.05] text-gray-900"
                 >
                   Your driving test<br />is booked.
                 </motion.h1>
@@ -436,7 +436,7 @@ export default function App() {
                   custom={2}
                   initial="hidden"
                   animate="visible"
-                  className="text-[var(--text-fluid-hero)] font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
+                  className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
                 >
                   Are you actually ready?
                 </motion.h1>
@@ -503,7 +503,7 @@ export default function App() {
             className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
-            <h2 className="text-[var(--text-fluid-h2)] font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-3">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-3">
               Is this for you?
             </h2>
             <p className="text-gray-600 text-xl max-w-xl mx-auto">
@@ -567,7 +567,7 @@ export default function App() {
             className="text-center mb-8 sm:mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
-            <h2 className="text-[var(--text-fluid-h2)] font-semibold tracking-tight text-gray-900 leading-tight text-balance">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance">
               Three steps. One honest result.
             </h2>
           </motion.div>
@@ -644,7 +644,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-[var(--text-fluid-h2-dark)] font-semibold tracking-tight text-white leading-[1.1] text-balance mb-10 sm:mb-14"
+            className="text-3xl sm:text-4xl font-semibold tracking-tight text-white leading-[1.1] text-balance mb-10 sm:mb-14"
           >
             LESSONS teach you <span className="text-purple-400">HOW</span> to drive.{' '}
             <br className="hidden sm:block" />
@@ -692,7 +692,7 @@ export default function App() {
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
               Build confidence for your exam
             </p>
-            <h2 className="text-[var(--text-fluid-h2)] font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-4">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-4">
               Not confident about your test?<br />Failed before and don't want to again?
             </h2>
             <p className="text-gray-700 text-xl font-medium">

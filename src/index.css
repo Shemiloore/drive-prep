@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
-:root {
-  --text-fluid-hero: clamp(1.75rem, 1rem + 3.75vw, 4.5rem);
-  --text-fluid-h2: clamp(1.5rem, 1rem + 2.5vw, 3rem);
-  --text-fluid-h2-dark: clamp(1.5rem, 1rem + 3vw, 3.75rem);
-}
-
 * {
   box-sizing: border-box;
 }

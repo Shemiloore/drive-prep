@@ -393,7 +393,7 @@ export default function App() {
       <Nav onWaitlistClick={scrollToWaitlist} />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="relative flex items-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-white min-h-[80vh] lg:min-h-screen">
         {/* BG blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
@@ -427,7 +427,7 @@ export default function App() {
                   custom={1}
                   initial="hidden"
                   animate="visible"
-                  className="text-5xl sm:text-6xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] text-gray-900"
+                  className="text-4xl sm:text-5xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] text-gray-900"
                 >
                   Your driving test<br />is booked.
                 </motion.h1>
@@ -436,7 +436,7 @@ export default function App() {
                   custom={2}
                   initial="hidden"
                   animate="visible"
-                  className="text-5xl sm:text-6xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
+                  className="text-4xl sm:text-5xl lg:text-[4.5rem] font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
                 >
                   Are you actually ready?
                 </motion.h1>
@@ -475,7 +475,7 @@ export default function App() {
 
             {/* Right — 40% */}
             <motion.div
-              className="lg:col-span-2 flex justify-center"
+              className="lg:col-span-2 hidden lg:flex justify-center"
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -493,7 +493,7 @@ export default function App() {
       </section>
 
       {/* ── Who It's For ──────────────────────────────────────────────────── */}
-      <section id="who" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
+      <section id="who" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
@@ -503,7 +503,7 @@ export default function App() {
             className="text-center mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-3">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-3">
               Is this for you?
             </h2>
             <p className="text-gray-600 text-xl max-w-xl mx-auto">
@@ -557,7 +557,7 @@ export default function App() {
       </section>
 
       {/* ── How It Works ──────────────────────────────────────────────────── */}
-      <section id="how" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="how" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
@@ -567,7 +567,7 @@ export default function App() {
             className="text-center mb-14"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
               Three steps. One honest result.
             </h2>
           </motion.div>
@@ -620,7 +620,7 @@ export default function App() {
       </section>
 
       {/* ── Dark Section ──────────────────────────────────────────────────── */}
-      <section id="why" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#0b021f] relative overflow-hidden">
+      <section id="why" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#0b021f] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-purple-900/30 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-900/20 rounded-full blur-3xl" />
@@ -644,7 +644,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1] mb-14"
+            className="text-3xl sm:text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1] mb-10 sm:mb-14"
           >
             LESSONS teach you <span className="text-purple-400">HOW</span> to drive.{' '}
             <br className="hidden sm:block" />
@@ -680,7 +680,7 @@ export default function App() {
       </section>
 
       {/* ── Waitlist / Final CTA ───────────────────────────────────────────── */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white" ref={waitlistRef}>
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white" ref={waitlistRef}>
         <div className="max-w-md mx-auto text-center">
           <motion.div
             variants={blurIn}
@@ -692,7 +692,7 @@ export default function App() {
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
               Build confidence for your exam
             </p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-gray-900 leading-tight mb-4">
               Not confident about your test?<br />Failed before and don't want to again?
             </h2>
             <p className="text-gray-700 text-xl font-medium">

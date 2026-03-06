@@ -1,9 +1,7 @@
 // Local dev API server — runs alongside Vite
 import { createServer } from 'http'
-import { google } from 'googleapis'
 import { readFileSync } from 'fs'
 
-// Same env reader as test-sheets.mjs (proven working)
 const env = readFileSync('.env.local', 'utf8')
   .split('\n')
   .reduce((acc, line) => {
@@ -12,7 +10,6 @@ const env = readFileSync('.env.local', 'utf8')
     return acc
   }, {})
 
-const SHEET_ID = '1wtJN1MGIIOBZO71GfB0vzg07UtCuP2DO2gsNWDLIagc'
 const PORT = 3001
 
 const server = createServer(async (req, res) => {
@@ -32,23 +29,26 @@ const server = createServer(async (req, res) => {
     try {
       const { name, email, device } = JSON.parse(body)
 
-      const auth = new google.auth.GoogleAuth({
-        credentials: {
-          client_email: env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-          private_key: env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      const response = await fetch('https://api.brevo.com/v3/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': env.BREVO_API_KEY,
         },
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        body: JSON.stringify({
+          email,
+          attributes: {
+            FIRSTNAME: name || '',
+            DEVICE: device || '',
+          },
+          updateEnabled: true,
+        }),
       })
 
-      const sheets = google.sheets({ version: 'v4', auth })
-      const timestamp = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' })
-
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SHEET_ID,
-        range: 'Sheet1!A:D',
-        valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [[timestamp, name || '', email, device || '']] },
-      })
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.message || `Brevo error ${response.status}`)
+      }
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ success: true }))

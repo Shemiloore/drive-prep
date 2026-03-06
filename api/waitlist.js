@@ -1,9 +1,4 @@
-import { google } from 'googleapis'
-
-const SHEET_ID = '1wtJN1MGIIOBZO71GfB0vzg07UtCuP2DO2gsNWDLIagc'
-
 export default async function handler(req, res) {
-  // Allow CORS from your own domain
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
@@ -16,26 +11,26 @@ export default async function handler(req, res) {
   if (!email) return res.status(400).json({ error: 'Email is required' })
 
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    const response = await fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
       },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      body: JSON.stringify({
+        email,
+        attributes: {
+          FIRSTNAME: name || '',
+          DEVICE: device || '',
+        },
+        updateEnabled: true,
+      }),
     })
 
-    const sheets = google.sheets({ version: 'v4', auth })
-
-    const timestamp = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' })
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: 'Sheet1!A:D',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [[timestamp, name || '', email, device || '']],
-      },
-    })
+    if (!response.ok) {
+      const err = await response.json()
+      throw new Error(err.message || `Brevo error ${response.status}`)
+    }
 
     return res.status(200).json({ success: true })
   } catch (err) {

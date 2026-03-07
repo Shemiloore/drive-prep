@@ -422,6 +422,108 @@ function MobileCarousel({ children, count, containerClass, dark = false }) {
   )
 }
 
+// ─── Interactive Scorecard ───────────────────────────────────────────────────
+function InteractiveScorecard() {
+  const [minors, setMinors] = useState(0)
+  const [serious, setSerious] = useState(false)
+  const [lastAction, setLastAction] = useState('')
+
+  const isPassing = !serious && minors < 16
+  const statusColor = isPassing ? 'text-green-600' : 'text-red-600'
+  const statusBg = isPassing ? 'bg-green-50' : 'bg-red-50'
+  const statusBorder = isPassing ? 'border-green-200' : 'border-red-200'
+
+  const addMinor = (type) => {
+    if (minors < 20) setMinors(prev => prev + 1)
+    setLastAction(`Added Driving Fault: ${type}`)
+  }
+
+  const toggleSerious = () => {
+    setSerious(true)
+    setLastAction('SERIOUS FAULT recorded')
+  }
+
+  const reset = () => {
+    setMinors(0)
+    setSerious(false)
+    setLastAction('Test Reset')
+  }
+
+  return (
+    <div className="bg-white rounded-[32px] border border-gray-100 shadow-2xl overflow-hidden max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="bg-[#1A1A1B] px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">Live Mock Test</span>
+        </div>
+        <button onClick={reset} className="text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">
+          Reset Test
+        </button>
+      </div>
+
+      <div className="p-6 sm:p-8">
+        {/* Status Display */}
+        <div className={`mb-8 p-6 rounded-2xl border ${statusBorder} ${statusBg} transition-colors duration-500 text-center`}>
+          <div className={`text-4xl sm:text-5xl font-black italic tracking-tighter mb-1 ${statusColor}`}>
+            {isPassing ? 'PASSING' : 'FAILING'}
+          </div>
+          <p className="text-gray-600 text-sm font-medium">
+            {serious ? '1 Serious Fault (Automatic Fail)' : `${minors} Driving Faults (Max 15)`}
+          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="space-y-3">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Driving Faults (Minors)</p>
+            <div className="grid grid-cols-2 gap-2">
+              {['Mirrors', 'Signals', 'Speed', 'Position'].map(fault => (
+                <button
+                  key={fault}
+                  onClick={() => addMinor(fault)}
+                  className="bg-gray-50 hover:bg-violet-50 border border-gray-100 hover:border-violet-200 text-gray-700 py-3 rounded-xl text-xs font-bold transition-all active:scale-95"
+                >
+                  + {fault}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-3">
+            <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest ml-1 text-center sm:text-left">Serious Faults</p>
+            <button
+              onClick={toggleSerious}
+              disabled={serious}
+              className={`w-full h-[calc(100%-25px)] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-2 transition-all ${
+                serious 
+                ? 'bg-red-600 border-red-600 text-white' 
+                : 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100 active:scale-95'
+              }`}
+            >
+              <Shield size={24} />
+              <span className="text-xs font-black uppercase italic">Add Serious Fault</span>
+              <span className="text-[9px] opacity-70">Instant Test Fail</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Live Feed */}
+        <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-violet-600" />
+            <span className="text-xs text-gray-500 font-medium">{lastAction || 'Waiting for first fault...'}</span>
+          </div>
+          <div className="flex gap-1">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-gray-200" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const waitlistRef = useRef(null)
@@ -537,6 +639,37 @@ export default function App() {
               </motion.div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* ── Experience the Test ───────────────────────────────────────────── */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            className="text-center mb-12"
+          >
+            <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">TRY THE SIMULATOR</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900 mb-4">
+              How would you score today?
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              During a real test, the examiner marks faults instantly. 
+              One serious mistake is an automatic fail. Try it yourself below.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <InteractiveScorecard />
+          </motion.div>
         </div>
       </section>
 

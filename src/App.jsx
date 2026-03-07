@@ -431,29 +431,32 @@ export default function App() {
   }
 
   return (
-    <div className="overflow-x-hidden font-['Inter',sans-serif]">
+    <div className="overflow-x-hidden font-['Inter',sans-serif] bg-white relative">
       <Nav onWaitlistClick={scrollToWaitlist} />
 
+      {/* Persistent Road Line (Lane Marking) */}
+      <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px border-l-2 border-dashed border-gray-100 pointer-events-none z-0 hidden lg:block" aria-hidden="true" />
+
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section className="relative flex items-center pt-20 pb-10 sm:pb-16 px-4 sm:px-6 lg:px-8 bg-white lg:min-h-screen">
+      <section className="relative flex items-center pt-24 pb-16 lg:pb-32 px-4 sm:px-6 lg:px-8 bg-white lg:min-h-[90vh]">
         {/* BG blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-50 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-purple-50/50 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-50/50 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-7xl mx-auto w-full relative">
-          <div className="grid lg:grid-cols-5 gap-12 lg:gap-8 items-center">
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
 
-            {/* Left — 60% */}
-            <div className="lg:col-span-3">
+            {/* Left — Text content */}
+            <div className="lg:col-span-7">
               {/* Eyebrow */}
               <motion.div
                 variants={blurIn}
                 custom={0}
                 initial="hidden"
                 animate="visible"
-                className="inline-flex items-center gap-2 bg-violet-50 border border-violet-100 rounded-full px-4 py-2 mb-4 sm:mb-8"
+                className="inline-flex items-center gap-2 bg-violet-50 border border-violet-100 rounded-full px-4 py-2 mb-8"
               >
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -463,22 +466,22 @@ export default function App() {
               </motion.div>
 
               {/* Headline */}
-              <div className="mb-4 sm:mb-6 space-y-1">
+              <div className="mb-6 space-y-2">
                 <motion.h1
                   variants={blurIn}
                   custom={1}
                   initial="hidden"
                   animate="visible"
-                  className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.05] text-gray-900"
+                  className="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.05] text-gray-900"
                 >
-                  Your driving test<br />is booked.
+                  Have you booked your<br />driving test?
                 </motion.h1>
                 <motion.h1
                   variants={blurIn}
                   custom={2}
                   initial="hidden"
                   animate="visible"
-                  className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
+                  className="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
                 >
                   Are you actually ready?
                 </motion.h1>
@@ -490,7 +493,7 @@ export default function App() {
                 custom={3}
                 initial="hidden"
                 animate="visible"
-                className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-10 max-w-xl"
+                className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-10 max-w-xl"
               >
                 Run a full mock test drive with someone you trust.
                 They stay quiet, note your faults, and the app tells you if you'd pass or fail.
@@ -502,93 +505,83 @@ export default function App() {
                 custom={4}
                 initial="hidden"
                 animate="visible"
-                className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4"
+                className="flex flex-col sm:flex-row sm:items-center gap-4"
               >
                 <button
                   onClick={scrollToWaitlist}
-                  className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-7 py-4 rounded-full text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95 w-full sm:w-auto"
+                  className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-4 rounded-full text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95 w-full sm:w-auto"
                 >
                   Join the waitlist
                   <ArrowRight size={18} />
                 </button>
-                <p className="text-sm text-gray-500 text-center sm:text-left sm:self-center">No spam. One email when we launch.</p>
+                <div className="text-sm text-gray-500 text-center sm:text-left">
+                  <span className="block font-medium text-gray-700">UK learners only.</span>
+                  No spam. One email when we launch.
+                </div>
               </motion.div>
             </div>
 
-            {/* Right — 40% */}
+            {/* Right — Phone Mockup (Grid Breaking) */}
             <motion.div
-              className="lg:col-span-2 hidden lg:flex justify-center"
-              initial={{ opacity: 0, x: 60 }}
+              className="lg:col-span-5 hidden lg:flex justify-end relative"
+              initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
             >
               <motion.div
-                animate={{ y: [-8, 8, -8] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="will-change-transform"
+                animate={{ y: [-10, 10, -10] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute top-0 -right-4 z-20"
               >
                 <IPhoneMockup />
               </motion.div>
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-gray-300"
-          >
-            <ChevronDown size={28} />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* ── Who It's For ──────────────────────────────────────────────────── */}
-      <section id="who" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[#f5f3ff]">
-        <div className="max-w-7xl mx-auto">
+      <section id="who" className="relative py-20 lg:pt-40 lg:pb-32 px-4 sm:px-6 lg:px-8 bg-[#fbfaff]">
+        {/* Road detail */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-24 bg-gradient-to-b from-white to-transparent z-10" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-center mb-8 sm:mb-14"
+            className="text-center mb-16"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">WHO IT'S FOR</p>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-3">
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900 mb-4">
               Is this for you?
             </h2>
-            <p className="text-gray-600 text-xl max-w-xl mx-auto">
+            <p className="text-gray-500 text-xl max-w-xl mx-auto font-medium">
               Not for beginners.
             </p>
           </motion.div>
 
-          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 md:grid md:grid-cols-3 md:overflow-visible md:gap-5 md:pb-0">
+          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-6 lg:grid lg:grid-cols-3 lg:overflow-visible lg:gap-8">
             {[
-              {
-                Icon: Car,
-                title: 'You can already drive on your own',
-                story: "You're past beginner lessons, comfortable solo driving.",
-                bg: 'bg-violet-100',
-                iconClass: 'text-violet-600',
-              },
               {
                 Icon: Calendar,
                 title: "Your test is soon (or you've failed before)",
-                story: "Test date locked in, or second-chance nerves are real.",
+                story: "Test date locked in, or second-chance nerves are real. You need to know where you stand.",
                 bg: 'bg-purple-100',
                 iconClass: 'text-purple-600',
               },
               {
+                Icon: Car,
+                title: 'You can already drive on your own',
+                story: "You're past beginner lessons and comfortable handling the car without constant help.",
+                bg: 'bg-violet-100',
+                iconClass: 'text-violet-600',
+              },
+              {
                 Icon: Shield,
                 title: 'You want confidence, not guesswork',
-                story: "Proof you'd pass today. Not hope so.",
+                story: "Proof you'd pass today, not just hoping for the best on the morning of your exam.",
                 bg: 'bg-indigo-100',
                 iconClass: 'text-indigo-600',
               },
@@ -600,14 +593,14 @@ export default function App() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="snap-start snap-always flex-none w-[80vw] md:w-auto bg-white rounded-[28px] p-5 sm:p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                className="snap-start snap-always flex-none w-[85vw] lg:w-auto bg-white rounded-[32px] p-8 border border-violet-100/50 shadow-sm hover:shadow-xl hover:shadow-purple-100/50 transition-all duration-300"
               >
-                <div className={`w-12 h-12 ${card.bg} rounded-2xl flex items-center justify-center mb-5`}>
-                  <card.Icon size={22} className={card.iconClass} />
+                <div className={`w-14 h-14 ${card.bg} rounded-2xl flex items-center justify-center mb-6`}>
+                  <card.Icon size={26} className={card.iconClass} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{card.story}</p>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3 leading-tight">{card.title}</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">{card.story}</p>
               </motion.div>
             ))}
           </MobileCarousel>

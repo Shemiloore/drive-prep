@@ -424,100 +424,176 @@ function MobileCarousel({ children, count, containerClass, dark = false }) {
 
 // ─── Interactive Scorecard ───────────────────────────────────────────────────
 function InteractiveScorecard() {
-  const [minors, setMinors] = useState(0)
+  const [faults, setFaults] = useState({
+    Mirrors: 0,
+    Signals: 0,
+    Speed: 0,
+    Position: 0
+  })
   const [serious, setSerious] = useState(false)
   const [lastAction, setLastAction] = useState('')
+  const [isFinished, setIsFinished] = useState(false)
 
-  const isPassing = !serious && minors < 16
-  const statusColor = isPassing ? 'text-green-600' : 'text-red-600'
-  const statusBg = isPassing ? 'bg-green-50' : 'bg-red-50'
-  const statusBorder = isPassing ? 'border-green-200' : 'border-red-200'
+  const totalMinors = Object.values(faults).reduce((a, b) => a + b, 0)
+  const isPassing = !serious && totalMinors < 16 && !isFinished
+  const finalResult = !serious && totalMinors < 16
 
   const addMinor = (type) => {
-    if (minors < 20) setMinors(prev => prev + 1)
-    setLastAction(`Added Driving Fault: ${type}`)
+    if (isFinished || serious) return
+    
+    const newCount = faults[type] + 1
+    if (newCount === 3) {
+      setSerious(true)
+      setLastAction(`3x ${type} = Serious Fault!`)
+      setFaults(prev => ({ ...prev, [type]: 3 }))
+    } else {
+      setFaults(prev => ({ ...prev, [type]: newCount }))
+      setLastAction(`Added Minor: ${type}`)
+    }
   }
 
   const toggleSerious = () => {
+    if (isFinished) return
     setSerious(true)
     setLastAction('SERIOUS FAULT recorded')
   }
 
   const reset = () => {
-    setMinors(0)
+    setFaults({ Mirrors: 0, Signals: 0, Speed: 0, Position: 0 })
     setSerious(false)
     setLastAction('Test Reset')
+    setIsFinished(false)
+  }
+
+  const endTrip = () => {
+    setIsFinished(true)
+    setLastAction('Test Drive Complete')
   }
 
   return (
-    <div className="bg-white rounded-[32px] border border-gray-100 shadow-2xl overflow-hidden max-w-2xl mx-auto">
+    <div className="bg-white rounded-[32px] border border-gray-100 shadow-2xl overflow-hidden max-w-2xl mx-auto relative">
+      {/* Overlay for Finished State */}
+      <AnimatePresence>
+        {isFinished && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            className="absolute inset-0 z-50 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center"
+          >
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${finalResult ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+              {finalResult ? <CheckCircle2 size={40} /> : <X size={40} />}
+            </div>
+            <h3 className="text-3xl font-black italic tracking-tighter mb-2">
+              {finalResult ? 'YOU PASSED ✓' : 'YOU FAILED ✗'}
+            </h3>
+            <p className="text-gray-600 mb-8 max-w-xs">
+              {serious ? 'Failed due to a Serious Fault.' : totalMinors >= 16 ? 'Failed on too many minor faults.' : 'Great job! You stayed within the limits.'}
+            </p>
+            <button onClick={reset} className="bg-violet-600 text-white px-8 py-3 rounded-full font-bold text-sm hover:bg-violet-700 transition-all">
+              Try Again
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <div className="bg-[#1A1A1B] px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
           <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">Live Mock Test</span>
         </div>
-        <button onClick={reset} className="text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">
-          Reset Test
-        </button>
+        <div className="flex gap-4">
+          <button onClick={reset} className="text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">
+            Reset
+          </button>
+          <button 
+            onClick={endTrip} 
+            disabled={isFinished}
+            className="bg-violet-600 hover:bg-violet-700 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-md transition-colors disabled:opacity-50"
+          >
+            End Trip
+          </button>
+        </div>
       </div>
 
       <div className="p-6 sm:p-8">
         {/* Status Display */}
-        <div className={`mb-8 p-6 rounded-2xl border ${statusBorder} ${statusBg} transition-colors duration-500 text-center`}>
-          <div className={`text-4xl sm:text-5xl font-black italic tracking-tighter mb-1 ${statusColor}`}>
-            {isPassing ? 'PASSING' : 'FAILING'}
+        <div className={`mb-8 p-6 rounded-2xl border transition-colors duration-500 text-center ${
+          serious || totalMinors >= 16 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
+        }`}>
+          <div className={`text-4xl sm:text-5xl font-black italic tracking-tighter mb-1 ${
+            serious || totalMinors >= 16 ? 'text-red-600' : 'text-green-600'
+          }`}>
+            {serious || totalMinors >= 16 ? 'FAILING' : 'PASSING'}
           </div>
-          <p className="text-gray-600 text-sm font-medium">
-            {serious ? '1 Serious Fault (Automatic Fail)' : `${minors} Driving Faults (Max 15)`}
-          </p>
+          <div className="flex justify-center items-center gap-2 text-gray-600 text-sm font-medium">
+            <span>{totalMinors} Minors</span>
+            <span className="opacity-30">|</span>
+            <span className={serious ? 'text-red-600 font-bold' : ''}>{serious ? '1 Serious' : '0 Serious'}</span>
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="space-y-3">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Driving Faults (Minors)</p>
-            <div className="grid grid-cols-2 gap-2">
-              {['Mirrors', 'Signals', 'Speed', 'Position'].map(fault => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center px-1">
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Driving Faults</p>
+              <p className="text-[9px] text-gray-400 font-medium italic">3 strikes = 1 Major</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {Object.keys(faults).map(type => (
                 <button
-                  key={fault}
-                  onClick={() => addMinor(fault)}
-                  className="bg-gray-50 hover:bg-violet-50 border border-gray-100 hover:border-violet-200 text-gray-700 py-3 rounded-xl text-xs font-bold transition-all active:scale-95"
+                  key={type}
+                  onClick={() => addMinor(type)}
+                  disabled={serious || isFinished}
+                  className="bg-gray-50 hover:bg-violet-50 border border-gray-100 hover:border-violet-200 text-gray-700 p-4 rounded-xl text-xs font-bold transition-all active:scale-95 flex flex-col items-center gap-2 disabled:opacity-50"
                 >
-                  + {fault}
+                  <span className="uppercase tracking-tight">+ {type}</span>
+                  <div className="flex gap-1.5">
+                    {[1, 2, 3].map(step => (
+                      <div 
+                        key={step} 
+                        className={`w-1.5 h-1.5 rounded-full border transition-colors ${
+                          faults[type] >= step 
+                          ? step === 3 ? 'bg-red-500 border-red-500' : 'bg-violet-600 border-violet-600' 
+                          : 'bg-white border-gray-200'
+                        }`} 
+                      />
+                    ))}
+                  </div>
                 </button>
               ))}
             </div>
           </div>
-          <div className="space-y-3">
-            <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest ml-1 text-center sm:text-left">Serious Faults</p>
+          <div className="space-y-4">
+            <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest px-1">Critical Error</p>
             <button
               onClick={toggleSerious}
-              disabled={serious}
-              className={`w-full h-[calc(100%-25px)] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-2 transition-all ${
+              disabled={serious || isFinished}
+              className={`w-full h-[calc(100%-30px)] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-3 transition-all ${
                 serious 
-                ? 'bg-red-600 border-red-600 text-white' 
-                : 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100 active:scale-95'
+                ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-200' 
+                : 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100 active:scale-95 disabled:opacity-50'
               }`}
             >
-              <Shield size={24} />
-              <span className="text-xs font-black uppercase italic">Add Serious Fault</span>
-              <span className="text-[9px] opacity-70">Instant Test Fail</span>
+              <Shield size={28} />
+              <div className="text-center">
+                <span className="block text-sm font-black uppercase italic tracking-tighter leading-tight">Serious Fault</span>
+                <span className="text-[10px] opacity-70 font-bold uppercase tracking-widest">Automatic Fail</span>
+              </div>
             </button>
           </div>
         </div>
 
         {/* Live Feed */}
-        <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-violet-600" />
-            <span className="text-xs text-gray-500 font-medium">{lastAction || 'Waiting for first fault...'}</span>
+        <div className="bg-gray-100/50 rounded-xl px-4 py-3 border border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className={`w-2 h-2 rounded-full shrink-0 ${serious ? 'bg-red-600' : 'bg-violet-600'}`} />
+            <span className="text-xs text-gray-500 font-bold uppercase tracking-tight truncate">
+              {lastAction || 'Wait for first fault...'}
+            </span>
           </div>
-          <div className="flex gap-1">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-1 h-1 rounded-full bg-gray-200" />
-            ))}
-          </div>
+          <p className="text-[10px] text-gray-400 font-bold italic shrink-0 ml-4">LIVE FEED</p>
         </div>
       </div>
     </div>

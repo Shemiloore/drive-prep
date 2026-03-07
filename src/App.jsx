@@ -661,7 +661,7 @@ export default function App() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
-                className="snap-start snap-always flex-none w-[80vw] md:w-auto text-center relative"
+                className="snap-start snap-always flex-none w-[80vw] md:w-auto text-center relative bg-white border border-gray-100 rounded-2xl p-6 shadow-sm md:bg-transparent md:border-0 md:rounded-none md:p-0 md:shadow-none"
               >
                 <div className="relative inline-flex w-16 h-16 bg-violet-600 rounded-2xl items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-200 z-10">
                   <step.Icon size={24} className="text-white" />

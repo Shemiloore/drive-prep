@@ -527,7 +527,7 @@ export default function App() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 md:grid md:grid-cols-3 md:overflow-visible md:gap-5 md:pb-0">
             {[
               {
                 Icon: Car,
@@ -559,7 +559,7 @@ export default function App() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-white rounded-[28px] p-5 sm:p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
+                className="snap-start snap-always flex-none w-[80vw] md:w-auto bg-white rounded-[28px] p-5 sm:p-8 border border-violet-100 shadow-sm hover:shadow-md transition-shadow will-change-transform"
               >
                 <div className={`w-12 h-12 ${card.bg} rounded-2xl flex items-center justify-center mb-5`}>
                   <card.Icon size={22} className={card.iconClass} />
@@ -588,7 +588,7 @@ export default function App() {
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
+          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-3 relative md:grid md:grid-cols-3 md:overflow-visible md:gap-8 md:pb-0">
             {/* Connector line */}
             <div className="hidden md:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
 
@@ -619,7 +619,7 @@ export default function App() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
-                className="text-center relative"
+                className="snap-start snap-always flex-none w-[80vw] md:w-auto text-center relative"
               >
                 <div className="relative inline-flex w-16 h-16 bg-violet-600 rounded-2xl items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-200 z-10">
                   <step.Icon size={24} className="text-white" />
@@ -668,7 +668,7 @@ export default function App() {
             <span className="text-purple-400">READY.</span>
           </motion.h2>
 
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
             {[
               { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
               { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },
@@ -682,7 +682,7 @@ export default function App() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 text-left hover:bg-white/10 transition-all duration-200 will-change-transform"
+                className="snap-start snap-always flex-none w-[80vw] sm:w-auto bg-white/5 border border-white/10 rounded-2xl p-6 text-left hover:bg-white/10 transition-all duration-200 will-change-transform"
               >
                 <div className="w-10 h-10 bg-purple-900/50 rounded-xl flex items-center justify-center mb-4">
                   <card.Icon size={18} className="text-purple-400" />

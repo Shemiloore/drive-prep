@@ -380,6 +380,48 @@ function WaitlistForm() {
   )
 }
 
+// ─── Mobile Carousel ──────────────────────────────────────────────────────────
+function MobileCarousel({ children, count, containerClass, dark = false }) {
+  const [active, setActive] = useState(0)
+  const ref = useRef(null)
+
+  const onScroll = () => {
+    if (!ref.current) return
+    const { scrollLeft, scrollWidth, clientWidth } = ref.current
+    const maxScroll = scrollWidth - clientWidth
+    const pct = maxScroll > 0 ? scrollLeft / maxScroll : 0
+    setActive(Math.min(Math.round(pct * (count - 1)), count - 1))
+  }
+
+  const goTo = (i) => {
+    if (!ref.current) return
+    const cardW = ref.current.scrollWidth / count
+    ref.current.scrollTo({ left: i * cardW, behavior: 'smooth' })
+  }
+
+  return (
+    <div>
+      <div ref={ref} onScroll={onScroll} className={containerClass}>
+        {children}
+      </div>
+      <div className="flex justify-center gap-2 mt-5 md:hidden">
+        {Array.from({ length: count }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              active === i
+                ? `w-5 ${dark ? 'bg-purple-400' : 'bg-violet-600'}`
+                : `w-1.5 ${dark ? 'bg-white/30' : 'bg-gray-300'}`
+            }`}
+            aria-label={`Card ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const waitlistRef = useRef(null)
@@ -527,7 +569,7 @@ export default function App() {
             </p>
           </motion.div>
 
-          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 md:grid md:grid-cols-3 md:overflow-visible md:gap-5 md:pb-0">
+          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 md:grid md:grid-cols-3 md:overflow-visible md:gap-5 md:pb-0">
             {[
               {
                 Icon: Car,
@@ -568,7 +610,7 @@ export default function App() {
                 <p className="text-gray-600 text-base leading-relaxed">{card.story}</p>
               </motion.div>
             ))}
-          </div>
+          </MobileCarousel>
         </div>
       </section>
 
@@ -588,7 +630,7 @@ export default function App() {
             </h2>
           </motion.div>
 
-          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-3 relative md:grid md:grid-cols-3 md:overflow-visible md:gap-8 md:pb-0">
+          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-3 relative md:grid md:grid-cols-3 md:overflow-visible md:gap-8 md:pb-0">
             {/* Connector line */}
             <div className="hidden md:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
 
@@ -631,7 +673,7 @@ export default function App() {
                 <p className="text-gray-600 text-base leading-relaxed max-w-xs mx-auto">{step.story}</p>
               </motion.div>
             ))}
-          </div>
+          </MobileCarousel>
         </div>
       </section>
 
@@ -668,7 +710,7 @@ export default function App() {
             <span className="text-purple-400">READY.</span>
           </motion.h2>
 
-          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+          <MobileCarousel count={3} dark containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
             {[
               { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
               { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },
@@ -691,7 +733,7 @@ export default function App() {
                 <p className="text-white/75 text-base leading-relaxed">{card.story}</p>
               </motion.div>
             ))}
-          </div>
+          </MobileCarousel>
         </div>
       </section>
 

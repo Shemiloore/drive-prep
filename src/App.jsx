@@ -612,9 +612,6 @@ export default function App() {
     <div className="overflow-x-hidden font-['Inter',sans-serif] bg-white relative">
       <Nav onWaitlistClick={scrollToWaitlist} />
 
-      {/* Persistent Road Line (Lane Marking) */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px border-l-2 border-dashed border-gray-100 pointer-events-none z-0 hidden lg:block" aria-hidden="true" />
-
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section className="relative flex items-center pt-24 pb-16 lg:pb-32 px-4 sm:px-6 lg:px-8 bg-white lg:min-h-[90vh]">
         {/* BG blobs */}

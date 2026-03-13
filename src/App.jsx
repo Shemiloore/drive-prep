@@ -869,7 +869,7 @@ export default function App() {
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">HOW IT WORKS</p>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance">
-              Three steps. One honest result.
+              Four steps. One honest result.
             </h2>
           </motion.div>
 

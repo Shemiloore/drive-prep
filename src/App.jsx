@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, Car, Calendar, Shield,
-  UserPlus, Navigation, ClipboardList, ChevronDown, Menu, X, Smartphone,
-  PiggyBank, Target, Eye
+  UserPlus, Navigation, ClipboardList, Menu, X, Smartphone,
+  PiggyBank, Target, AlertCircle
 } from 'lucide-react'
 
 const API_URL = '/api/waitlist'
@@ -380,6 +380,41 @@ function WaitlistForm() {
   )
 }
 
+// ─── Waitlist Modal ───────────────────────────────────────────────────────────
+function WaitlistModal({ onClose }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 40 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-all"
+          aria-label="Close"
+        >
+          <X size={20} />
+        </button>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Join the waitlist</h2>
+          <p className="text-gray-500 text-base">Be among the first UK learners to try DrivePrep. Free — one email when we launch.</p>
+        </div>
+        <WaitlistForm />
+      </motion.div>
+    </motion.div>
+  )
+}
+
 // ─── Mobile Carousel ──────────────────────────────────────────────────────────
 function MobileCarousel({ children, count, containerClass, dark = false }) {
   const [active, setActive] = useState(0)
@@ -435,7 +470,6 @@ function InteractiveScorecard() {
   const [isFinished, setIsFinished] = useState(false)
 
   const totalMinors = Object.values(faults).reduce((a, b) => a + b, 0)
-  const isPassing = !serious && totalMinors < 16 && !isFinished
   const finalResult = !serious && totalMinors < 16
 
   const addMinor = (type) => {
@@ -602,15 +636,18 @@ function InteractiveScorecard() {
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const waitlistRef = useRef(null)
 
-  const scrollToWaitlist = () => {
-    waitlistRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
 
   return (
     <div className="overflow-x-hidden font-['Inter',sans-serif] bg-white relative">
-      <Nav onWaitlistClick={scrollToWaitlist} />
+      <AnimatePresence>
+        {isModalOpen && <WaitlistModal onClose={closeModal} />}
+      </AnimatePresence>
+      <Nav onWaitlistClick={openModal} />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section className="relative flex items-center pt-24 pb-16 lg:pb-32 px-4 sm:px-6 lg:px-8 bg-white lg:min-h-[90vh]">
@@ -649,7 +686,7 @@ export default function App() {
                   animate="visible"
                   className="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.05] text-gray-900"
                 >
-                  Have you booked your<br />driving test?
+                  Stop Memorising Test Routes.
                 </motion.h1>
                 <motion.h1
                   variants={blurIn}
@@ -658,7 +695,7 @@ export default function App() {
                   animate="visible"
                   className="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.05] bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent"
                 >
-                  Are you actually ready?
+                  Fix the Habits That Make People Fail.
                 </motion.h1>
               </div>
 
@@ -670,8 +707,8 @@ export default function App() {
                 animate="visible"
                 className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-10 max-w-xl"
               >
-                Run a full mock test drive with someone you trust.
-                They stay quiet, note your faults, and the app tells you if you'd pass or fail.
+                Failed your test recently, or have one booked and not sure if you're truly ready?
+                You're not alone — and it's probably not what you think.
               </motion.p>
 
               {/* CTAs */}
@@ -683,7 +720,7 @@ export default function App() {
                 className="flex flex-col sm:flex-row sm:items-center gap-4"
               >
                 <button
-                  onClick={scrollToWaitlist}
+                  onClick={openModal}
                   className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-4 rounded-full text-base transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-purple-200 active:scale-95 w-full sm:w-auto"
                 >
                   Join the waitlist
@@ -768,26 +805,33 @@ export default function App() {
             </p>
           </motion.div>
 
-          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-6 lg:grid lg:grid-cols-3 lg:overflow-visible lg:gap-8">
+          <MobileCarousel count={4} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-6 lg:grid lg:grid-cols-2 xl:grid-cols-4 lg:overflow-visible lg:gap-6">
             {[
               {
                 Icon: Calendar,
-                title: "Your test is soon (or you've failed before)",
-                story: "Test date locked in, or second-chance nerves are real. You need to know where you stand.",
+                title: 'Your test is booked and you want to know if you\'re ready',
+                story: 'Test date locked in. You need proof your driving is at the right standard — not just a feeling.',
                 bg: 'bg-purple-100',
                 iconClass: 'text-purple-600',
               },
               {
-                Icon: Car,
-                title: 'You can already drive on your own',
-                story: "You're past beginner lessons and comfortable handling the car without constant help.",
+                Icon: AlertCircle,
+                title: "You've failed before and want to understand why",
+                story: "Second-chance nerves are real. Find out exactly what went wrong so it doesn't happen again.",
+                bg: 'bg-red-100',
+                iconClass: 'text-red-500',
+              },
+              {
+                Icon: PiggyBank,
+                title: "You can't afford endless extra lessons",
+                story: 'More paid lessons aren\'t always the answer. Use someone you know to get real, structured feedback.',
                 bg: 'bg-violet-100',
                 iconClass: 'text-violet-600',
               },
               {
                 Icon: Shield,
-                title: 'You want confidence, not guesswork',
-                story: "Proof you'd pass today, not just hoping for the best on the morning of your exam.",
+                title: 'You want confidence before test day',
+                story: "Not just hoping for the best. Proof that your driving is ready before you step into that examiner's car.",
                 bg: 'bg-indigo-100',
                 iconClass: 'text-indigo-600',
               },
@@ -829,28 +873,31 @@ export default function App() {
             </h2>
           </motion.div>
 
-          <MobileCarousel count={3} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-3 relative md:grid md:grid-cols-3 md:overflow-visible md:gap-8 md:pb-0">
-            {/* Connector line */}
-            <div className="hidden md:block absolute top-12 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-gradient-to-r from-violet-200 via-purple-300 to-violet-200" />
-
+          <MobileCarousel count={4} containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 pb-3 relative md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:gap-8 md:pb-0">
             {[
               {
                 num: '1',
                 Icon: UserPlus,
-                title: 'Invite a Buddy',
-                story: 'Full UK licence, 3+ years. Parent, partner, sibling.',
+                title: 'Invite Your Buddy',
+                story: 'A parent, friend, or partner — anyone with 3+ years on the road.',
               },
               {
                 num: '2',
-                Icon: Navigation,
-                title: "Drive like it's the real test",
-                story: 'They stay quiet. You follow sat nav. They note faults.',
+                Icon: Car,
+                title: 'Go for a Drive',
+                story: 'Drive as you normally would. Your Buddy stays quiet and observes.',
               },
               {
                 num: '3',
+                Icon: Navigation,
+                title: 'They Tap Faults',
+                story: 'Using the app, your Buddy marks observations as they happen.',
+              },
+              {
+                num: '4',
                 Icon: ClipboardList,
-                title: "See your result",
-                story: 'App shows pass or fail, and exactly what went wrong.',
+                title: 'See Your Result',
+                story: 'Pass or fail — with a full breakdown of every fault.',
               },
             ].map((step, i) => (
               <motion.div
@@ -901,7 +948,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="text-3xl sm:text-4xl font-semibold tracking-tight text-white leading-[1.1] text-balance mb-10 sm:mb-14"
+            className="text-3xl sm:text-4xl font-semibold tracking-tight text-white leading-[1.1] text-balance mb-6 sm:mb-8"
           >
             LESSONS teach you <span className="text-purple-400">HOW</span> to drive.{' '}
             <br className="hidden sm:block" />
@@ -909,11 +956,33 @@ export default function App() {
             <span className="text-purple-400">READY.</span>
           </motion.h2>
 
+          <motion.blockquote
+            variants={blurIn}
+            custom={2}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            className="text-purple-300 text-lg sm:text-xl italic font-medium mb-4 leading-relaxed"
+          >
+            "Knowing the route won't save you. Knowing your habits will."
+          </motion.blockquote>
+
+          <motion.p
+            variants={blurIn}
+            custom={3}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            className="text-white/50 text-sm mb-12 sm:mb-16"
+          >
+            No AI. No sensors. No complicated setup. Just real feedback, from a real person you trust — structured the way a real examiner would do it.
+          </motion.p>
+
           <MobileCarousel count={3} dark containerClass="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
             {[
               { Icon: PiggyBank, title: 'No extra money on more lessons', story: 'Use someone you know. Not a paid instructor.' },
               { Icon: Target, title: 'Spot and fix habits that fail tests', story: 'See your real weaknesses before the examiner does.' },
-              { Icon: Eye, title: 'Go in knowing what to expect', story: 'Test day feels familiar. Not scary.' },
+              { Icon: Shield, title: 'Go in knowing what to expect', story: 'Test day feels familiar. Not scary.' },
             ].map((card, i) => (
               <motion.div
                 key={card.title}
@@ -947,13 +1016,13 @@ export default function App() {
             className="mb-7 sm:mb-10"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-4">
-              Build confidence for your exam
+              Know before you go
             </p>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight text-balance mb-4">
-              Not confident about your test?<br />Failed before and don't want to again?
+              Know If You're Ready<br />Before Test Day.
             </h2>
-            <p className="text-gray-700 text-xl font-medium">
-              DrivePrep is for you.
+            <p className="text-gray-600 text-lg leading-relaxed">
+              Be among the first learners to try DrivePrep.
             </p>
           </motion.div>
 
